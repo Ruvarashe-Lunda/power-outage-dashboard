@@ -5,7 +5,6 @@ async function getData() {
   let json = await result.json();
   return json;
 }
-getData();
 
 function extractFuture(obj) {
   return obj["future"];
@@ -16,47 +15,42 @@ function clearOutput() {
   output.innerHTML = "";
 }
 
-function renderOutput(items){
-      for (let index = 0; index < future.length; index++) {
+function renderOutput(future) {
+  for (let index = 0; index < future.length; index++) {
     const outage = future[index];
-    addToDom(outage);
+    addOneItemToDom(outage);
   }
-  console.log(future);
 }
 
 async function initialize() {
   const result = await getData();
   const future = extractFuture(result);
 
-  clearOutput();
-  renderOutput(future)
-
-
+  // clearOutput();
+  renderOutput(future);
 }
 
-function addToDom(item) {
+function addOneItemToDom(outage) {
   const output = document.getElementById("output");
-  // let wrapper = document.createElement('div')
+  // console.log(output);
+  // console.log(item);
 
-  for (let i = 0; i < item.length; i++) {
-    const templateCard = `
-            <div class="card border rounded-full space-y-4 p-10 bg-white">
-            <div class="text-center font-medium">${item[i].date}</div>
+  const templateCard = `
+          <div class="card border rounded-full space-y-4 p-10 bg-white">
+            <div class="text-center font-medium">${outage.date}</div>
             <div class="flex justify-between" >
-            <div>${outage.locality}</div>
-                <div>${outage.dictrict}</div>
+              <div>${outage.locality}</div>
+              <div>${outage.dictrict}</div>
             </div>
             <div class="flex justify-between">
                 <div>${outage.from}</div>
                 <div>${outage.to}</div>
             </div>
-            </div>
-       
+          </div>       
     `;
-    console.log(output);
-    output.innerHTML += templateCard;
-  }
+  output.innerHTML += templateCard;
 }
+
 document.addEventListener("DOMContentLoaded", () => {
   initialize();
 });
